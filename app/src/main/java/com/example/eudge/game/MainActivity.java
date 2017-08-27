@@ -1,59 +1,73 @@
 package com.example.eudge.game;
 
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
 
+import butterknife.BindView;
+
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.radioGroup)
+    protected RadioGroup mRadioGroup;
+    @BindView(R.id.radioButton1)
+    protected RadioButton mRadioButton1;
+    @BindView(R.id.radioButton2)
+    protected RadioButton mRadioButton2;
+    @BindView(R.id.radioButton1)
+    protected RadioButton mRadioButton3;
+    @BindView(R.id.textViewResult)
+    protected TextView mTextViewResult;
+    @BindView(R.id.checkButton)
+    protected Button mCheckButton;
+    @BindView(R.id.exitButton)
+    protected Button mExitButton;
+
     final Random random = new Random();
-    int [] mas = new int [3];
-    View []views = new View[3];
+    int [] mas = {0, 0, 0};
+    View []views = {mRadioButton1, mRadioButton2, mRadioButton3};
     int position = 0;
     int invisible = 0;
 
-    Button button1;
     RadioButton temp;
-    RadioButton radioButton1;
-    RadioButton radioButton2;
-    RadioButton radioButton3;
-    EditText editTextDJ;
-    EditText editTextMP;
-    RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button1 = (Button) findViewById(R.id.button1);
+        setRandomMas();
 
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        mCheckButton.setOnClickListener(view -> {
+            if (mRadioGroup.getCheckedRadioButtonId() == -1)
+                Toast.makeText(MainActivity.this.getApplicationContext(), "Нужно выбрать коробку!!!", Toast.LENGTH_SHORT).show();
+            else {
+                for (int i = 0; i < 3; i++) {
+                    if (mas[i] != 1 && mRadioGroup.getCheckedRadioButtonId() != i) {
+                        temp = (RadioButton) views[i];
+                        temp.setEnabled(false);
+                        invisible = i;
+                        MainActivity.this.showAlert();
+                        break;
+                    }
+                }
+            }
+        });
 
-        radioButton1 = (RadioButton) findViewById(R.id.radioButton1);
-        radioButton2 = (RadioButton) findViewById(R.id.radioButton2);
-        radioButton3 = (RadioButton) findViewById(R.id.radioButton3);
+        mExitButton.setOnClickListener(view -> {
 
-        views[0] = radioButton1;
-        views[1] = radioButton2;
-        views[2] = radioButton3;
+        });
+    }
 
-        editTextDJ = (EditText) findViewById(R.id.editTextDJ);
-        editTextMP = (EditText) findViewById(R.id.editTextMP);
-
-        for(int i=0; i<3; i++){
-            mas[i] = 0;
-        }
-
+    protected void setRandomMas(){
         for(int i=0; i<3; i++){
             mas[i] =  random.nextInt(1);
             position = i;
@@ -63,50 +77,33 @@ public class MainActivity extends AppCompatActivity {
                 position = i;
             }
         }
-
-        button1.setOnClickListener(view -> {
-            if(radioGroup.getCheckedRadioButtonId() == -1)
-            Toast.makeText(getApplicationContext(), "Нужно выбрать коробку!!!", Toast.LENGTH_SHORT).show();
-            else{
-                for (int i=0; i<3; i++){
-                    if(mas[i] != 1 && radioGroup.getCheckedRadioButtonId() != i) {
-                        temp = (RadioButton) views[i];
-                        temp.setEnabled(false);
-                        invisible = i;
-                        showAlert();
-                        break;
-                    }
-                }
-            }
-        });
-
     }
 
-    public void showAlert(){
+     protected void showAlert(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Внимание!");
         builder.setMessage("Изменить коробки?");
         builder.setCancelable(false);
         builder.setPositiveButton("Да", (dialog, i) -> {
             for (int j = 0; j < 3; j++) {
-                if (radioGroup.getCheckedRadioButtonId() != j && invisible != j) {
+                if (mRadioGroup.getCheckedRadioButtonId() != j && invisible != j) {
                     temp = (RadioButton) views[j];
                     temp.setChecked(true);
                 }
             }
             if (position == temp.getId()) {
-                editTextMP.setText("Ты победил!");
+                mTextViewResult.setText("Джексон!");
             }
             else {
-                editTextDJ.setText("Ты победил!");
+                mTextViewResult.setText("Мирополец!");
             }
         });
         builder.setNegativeButton("No", (dialog, i) -> {
             if (position == temp.getId()) {
-                editTextDJ.setText("Ты победил!");
+                mTextViewResult.setText("Мирополец!");
             }
             else {
-                editTextDJ.setText("Ты победил!");
+                mTextViewResult.setText("Джексон!");
             }
         });
         AlertDialog alert = builder.create();

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Game</string>
+    <string name="title">Выберите коробку:</string>
+    <string name="check">Проверить</string>
+    <string name="exit">Закончить</string>
+    <string name="viner">Победил:</string>
+    <string name="box1">Коробка №1</string>
+    <string name="box2">Коробка №2</string>
+    <string name="box3">Коробка №3</string>
 </resources>
