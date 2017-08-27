@@ -7,4 +7,5 @@
     <string name="box1">Коробка №1</string>
     <string name="box2">Коробка №2</string>
     <string name="box3">Коробка №3</string>
+    <string name="clear">Очистить</string>
 </resources>

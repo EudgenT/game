@@ -26,8 +26,6 @@ android {
 }
 
 buildscript {
-    ext.supportVersion = '25.0.0'
-    ext.butterKnifeVersion = '8.4.0'
     repositories {
         mavenCentral()
         jcenter()
